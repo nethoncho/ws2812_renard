@@ -159,8 +159,7 @@ void serialEvent()
                     continue;
                 }
                 if(oneByteBuffer > 0x80) {
-                    // Leave RenardDimmerOffset alone
-//                    RenardDimmerOffset = ((int)(oneByteBuffer)) * RENARD_CHANNELS_IN_BANK;
+                    RenardDimmerOffset = ((int)(oneByteBuffer - 0x80)) * RENARD_CHANNELS_IN_BANK;
                     RenardProtocolState = RENARD_PROTOCOL_DIMMER_VALUE;
                     continue;
                 }
