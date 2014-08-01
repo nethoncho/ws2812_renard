@@ -91,18 +91,12 @@ CRGB leds[NUM_LEDS];
 
 void setup() {
     LastSerialEventTime = millis() + MASTER_TIMEOUT;
-    pinMode(JSTICK_BTN, INPUT);
-    digitalWrite(JSTICK_BTN, HIGH);
-    pinMode(BUTTON_UP, INPUT);
-    digitalWrite(BUTTON_UP, HIGH);
-    pinMode(BUTTON_RIGHT, INPUT);
-    digitalWrite(BUTTON_RIGHT, HIGH);
-    pinMode(BUTTON_DOWN, INPUT);
-    digitalWrite(BUTTON_DOWN, HIGH);
-    pinMode(BUTTON_LEFT, INPUT);
-    digitalWrite(BUTTON_LEFT, HIGH);
-    pinMode(TOGGLE_SWITCH, INPUT);
-    digitalWrite(TOGGLE_SWITCH, HIGH);
+    pinMode(JSTICK_BTN, INPUT_PULLUP);
+    pinMode(BUTTON_UP, INPUT_PULLUP);
+    pinMode(BUTTON_RIGHT, INPUT_PULLUP);
+    pinMode(BUTTON_DOWN, INPUT_PULLUP);
+    pinMode(BUTTON_LEFT, INPUT_PULLUP);
+    pinMode(TOGGLE_SWITCH, INPUT_PULLUP);
     
     FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
 
