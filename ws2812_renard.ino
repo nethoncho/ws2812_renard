@@ -83,6 +83,7 @@ int dimmerValue = 255;
 unsigned long LastSerialEventTime;
 unsigned char oneByteBuffer;
 unsigned long RenardDimmerOffset;
+unsigned char ledBufferDirty;
 RENARD_PROTOCOL_STATES RenardProtocolState;
 
 // This is an array of leds.  One item for each led in your strip.
@@ -112,6 +113,8 @@ void setup() {
 
     RenardProtocolState = RENARD_PROTOCOL_NOSYNC;
     RenardDimmerOffset = 0;
+
+    ledBufferDirty = true;
 }
 
 void loop()
@@ -141,8 +144,11 @@ void serialEvent()
             case RENARD_PROTOCOL_NOSYNC:
                 break;
             case RENARD_PROTOCOL_DIMMER_UPDATE:
-                RenardProtocolState = RENARD_PROTOCOL_NOSYNC;
-                FastLED.show();
+                if(ledBufferDirty) {
+                    RenardProtocolState = RENARD_PROTOCOL_NOSYNC;
+                    FastLED.show();
+                    ledBufferDirty = false;
+                }
                 continue;
                 break;
             case RENARD_PROTOCOL_START_PACKET:
@@ -155,11 +161,13 @@ void serialEvent()
                 if(oneByteBuffer == 0x80) {
                     RenardDimmerOffset = 0;
                     fill_solid(leds, NUM_LEDS, CHSV( 0, 0, 0));
-                        RenardProtocolState = RENARD_PROTOCOL_DIMMER_VALUE;
+                    ledBufferDirty = true;
+                    RenardProtocolState = RENARD_PROTOCOL_DIMMER_VALUE;
                     continue;
                 }
                 if(oneByteBuffer > 0x80) {
                     RenardDimmerOffset = ((int)(oneByteBuffer - 0x80)) * RENARD_CHANNELS_IN_BANK;
+                    ledBufferDirty = true;
                     RenardProtocolState = RENARD_PROTOCOL_DIMMER_VALUE;
                     continue;
                 }
