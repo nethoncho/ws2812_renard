@@ -99,6 +99,8 @@ void setup() {
     pinMode(TOGGLE_SWITCH, INPUT_PULLUP);
     
     FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+    FastLED.setCorrection(TypicalSMD5050); // See color.h
+//    FastLED.setTemperature(HighNoonSun);
 
     Serial.begin(SERIAL_SPEED);
     Serial.setTimeout(SERIAL_TIMEOUT);
